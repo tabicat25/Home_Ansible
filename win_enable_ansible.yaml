@@ -1,6 +1,7 @@
 ---
 - hosts: all
-
+  gather_facts: false
+  
   tasks:
   - name: Configuring Host for Ansible
     ansible.windows.win_command: powershell.exe -
