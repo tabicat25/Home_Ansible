@@ -6,7 +6,9 @@
   - name: Configuring Host for Ansible
     ansible.windows.win_command: powershell.exe -
     args:
-      stdin: Write-Host "Running some PS Code"
+      stdin: | 
+        Write-Host "Running some PS Code"
+        winrm quickconfig -quiet -force
   #- name: Download and run ConfigureRemotingForAnsible.ps1 to setup WinRM
   #community.windows.psexec:
   #  hostname: '{{ hostvars[inventory_hostname]["ansible_host"] | default(inventory_hostname) }}'
