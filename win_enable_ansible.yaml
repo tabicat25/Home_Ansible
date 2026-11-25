@@ -2,20 +2,24 @@
 - hosts: all
 
   tasks:
-  - name: Download and run ConfigureRemotingForAnsible.ps1 to setup WinRM
-  community.windows.psexec:
-    hostname: '{{ hostvars[inventory_hostname]["ansible_host"] | default(inventory_hostname) }}'
-    connection_username: '{{ ansible_user }}'
-    connection_password: '{{ ansible_password }}'
-    encrypt: yes
-    executable: powershell.exe
-    arguments: '-'
-    stdin: |
-      $ErrorActionPreference = "Stop"
-      $sec_protocols = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::SystemDefault
-      $sec_protocols = $sec_protocols -bor [Net.SecurityProtocolType]::Tls12
-      [Net.ServicePointManager]::SecurityProtocol = $sec_protocols
-      $url = "https://github.com/ansible/ansible/raw/devel/examples/scripts/ConfigureRemotingForAnsible.ps1"
-      Invoke-Expression ((New-Object Net.WebClient).DownloadString($url))
-      exit
-  delegate_to: localhost
+  - name: Configuring Host for Ansible
+  ansible.windows.win_command: powershell.exe -
+  args:
+    stdin: Write-Host "Running some PS Code"
+  #- name: Download and run ConfigureRemotingForAnsible.ps1 to setup WinRM
+  #community.windows.psexec:
+  #  hostname: '{{ hostvars[inventory_hostname]["ansible_host"] | default(inventory_hostname) }}'
+  #  connection_username: '{{ ansible_user }}'
+  #  connection_password: '{{ ansible_password }}'
+  #  encrypt: yes
+  #  executable: powershell.exe
+  #  arguments: '-'
+  #  stdin: |
+  #    $ErrorActionPreference = "Stop"
+  #    $sec_protocols = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::SystemDefault
+  #    $sec_protocols = $sec_protocols -bor [Net.SecurityProtocolType]::Tls12
+  #    [Net.ServicePointManager]::SecurityProtocol = $sec_protocols
+  #    $url = "https://github.com/ansible/ansible/raw/devel/examples/scripts/ConfigureRemotingForAnsible.ps1"
+  #    Invoke-Expression ((New-Object Net.WebClient).DownloadString($url))
+  #    exit
+  #delegate_to: localhost
